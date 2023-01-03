@@ -4,7 +4,7 @@ A project to illustrate how you can obtain paradoxical pattern inversions when a
 
 [![Coverage](https://codecov.io/gh/bencardoen/LogParadox.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/bencardoen/LogParadox.jl)
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/bencardoen/LogParadox.jl/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/bencardoen/LogParadox.jl/tree/main)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/bencardoen/LogParadox.jl/tree/main.svg?style=svg&circle-token=304e0f4d40f0fdb0363572f8fabf8ee73334ebfd)](https://dl.circleci.com/status-badge/redirect/gh/bencardoen/LogParadox.jl/tree/main)
 
 ## Example
 
