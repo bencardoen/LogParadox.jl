@@ -15,7 +15,7 @@ module LogParadox
 using Statistics
 using Random
 
-export gm, am, picki, minmaxreplace, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
+export gm, am, picki, minmaxreplace, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
 
 """
     gm(xs, base=exp(1))

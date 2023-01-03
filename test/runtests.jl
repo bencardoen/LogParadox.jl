@@ -33,4 +33,14 @@ using Random
             end
         end
     end
+
+    @testset "repadd" begin
+        Random.seed!(42)
+        for i in 1:100
+            xs = 1 .+ rand(1000)*i
+            ys = transform_steps_replace(xs, 100)
+            @test am(ys) < am(xs)
+            @test gm(ys) > gm(xs)
+        end
+    end
 end
