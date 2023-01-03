@@ -34,6 +34,18 @@ using Random
         end
     end
 
+
+    @testset "sm" begin
+        Random.seed!(42)
+
+        xs = 1 .+ rand(1000)*10
+
+        s = smooth(xs, 5)
+        t = smooth(xs, 10)
+        @test ! all(s .== xs[1:length(s)])
+        @test ! all(t .== s[1:length(t)])
+    end
+
     @testset "repadd" begin
         Random.seed!(42)
         for i in 1:100

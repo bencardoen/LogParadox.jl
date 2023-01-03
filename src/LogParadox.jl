@@ -15,7 +15,7 @@ module LogParadox
 using Statistics
 using Random
 
-export gm, am, picki, minmaxreplace, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
+export gm, am, picki, smooth, minmaxreplace, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
 
 """
     gm(xs, base=exp(1))
@@ -35,6 +35,19 @@ function am(xs)
     return mean(xs)
 end
 
+"""
+    smooth(xs, step=2)
+
+    Return a smoothed (windowed average with step size) version of xs
+"""
+function smooth(xs, step=2)
+    N = length(xs)
+    rs = zeros(N-step)
+    for i in 1:N-step
+        rs[i]=am(xs[i:i+step])
+    end
+    return rs
+end
 
 """
     picki(N)
