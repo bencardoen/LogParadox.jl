@@ -179,4 +179,43 @@ end
 
 reprand! = rep_rand!
 
+
+
+function to_entries(smpl, tbl)
+    trs = [to_entry(s, tbl) for s in smpl]
+    return trs
+end
+
+
+"""
+    generate_image(counts, sizes, X, Y)
+
+    Generate an image using SPECHT's in silico 2D generators
+    
+"""
+function generate_image(counts, sizes, X, Y)
+    GS=[]
+    for a_c in keys(counts)
+        σ = (sizes[a_c]^2)/5
+        CT = counts[a_c]
+        @info "Object size $a_c has freq $CT"
+        cv = [[σ 0; 0 σ] for _ in 1:CT]
+        rs = SPECHT.generate_rand_coordinates(X, Y, CT; offset=50)
+        # GT = coordstogt([rs[i,:] for i in 1:N], X, Y)
+        G = SPECHT.fastgaussian2d([rs[i,:] for i in 1:CT], cv, X, Y)
+        push!(GS, G./maximum(G))
+    end
+    ima = GS[1] .+ GS[2] .+ GS[3] .+ GS[4]
+end
+
+function to_entry(s, tbl)
+    @assert reverse(sort(tbl)) == tbl
+    for (i, t) in enumerate(tbl)
+        if s <= sum(tbl[1:i])
+            return i
+        end
+    end
+    return size(tbl)[1]
+end
+
 end
