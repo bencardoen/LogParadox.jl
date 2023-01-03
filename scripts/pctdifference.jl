@@ -13,6 +13,8 @@
 # Copyright 2022-3, Ben Cardoen
 using Random, Distributions, Plots, HypothesisTests
 using LogParadox
+Random.seed!(42)
+es=randexp(1000)*1000 .+ 10
 _f = transform_steps
 F = reprand!
 _f = (x, y) -> transform_steps_replace(x, y, F)
@@ -23,11 +25,10 @@ ds = [steps[1]/steps[i] for i in 1:S]
 gsteps = [gm(_f(es, i)) for i in 1:S]
 dsg = [gsteps[1]/gsteps[i] for i in 1:S]
 z = Plots.plot(100 .* (1 .- ds), alpha=.1, label="δ μ+")
-Plots.plot!(100 .*(1 .- dsg), alpha=.1, label="δ μ*", xlabel="Number of elements replaced", ylabel="Differential of mean (%)")
+Plots.plot!(100 .*(1 .- dsg), alpha=.1, label="δ μ*", xlabel="Number of elements replaced (/1000)", ylabel="Differential of mean (%)")
 Plots.plot!(smooth(100 .*(1 .- dsg),10), alpha=1, label=false, color=:orange, xlabel="Number of elements replaced", ylabel="Differential of mean (%)")
 Plots.plot!(smooth(100 .*(1 .- ds),10), alpha=1, label=false, color=:blue, xlabel="Number of elements replaced", ylabel="Differential of mean (%)")
-
 # Plots.plot!(100 .* (abs.(1 .- dsg./ds)), label="Ratio: maximizing difference", xlabel="Number of elements altered", ylabel="% change in mean")
 Plots.plot(z, dpi=300, size=(800, 600))
-Plots.savefig(joinpath("figures", "differentialrand.pdf"))
+Plots.savefig(joinpath("figures", "differentialrand.png"))
 # Plots.plot(steps)

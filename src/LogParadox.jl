@@ -14,6 +14,7 @@
 module LogParadox
 using Statistics
 using SPECHT
+using StatsBase
 using Random
 
 export gm, am, picki, smooth, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!

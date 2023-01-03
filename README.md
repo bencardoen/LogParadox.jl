@@ -14,6 +14,11 @@ We show that you can get this effect with as little as 5% of the data differing.
 The necessary and sufficient conditions are derived in the paper, but our API allows you to test to see if you data is vulnerable or not.
 ![example](figures/interactivelp.gif)
 
+### Effect on significance testing
+Using a non-parametric hypothesis test, at 5% of data modified you can induce a strong effect consistly achieving significance.
+Note that this does not try to reinforce the flawed idea that significance in isolation is a valid finding, rather serve as a cautionary tale that inducing significant inversions is fairly easily done.
+![example](figures/pvals50_200.png)
+
 ## Installation
 - Get [Julia](https://julialang.org/learning/getting-started/)
 ```bash
