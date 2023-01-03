@@ -17,7 +17,7 @@ using Random
         for i in 1:100
             xs = 1 .+ rand(1000)*i
             ys = minmaxreplace(xs, i)
-            @test gm(xs) .<= gm(ys) .<= am(ys) .<= am(xs)
+            @test gm(xs) <= gm(ys) <= am(ys) <= am(xs)
         end
     end
 end
