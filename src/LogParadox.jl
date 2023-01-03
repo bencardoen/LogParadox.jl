@@ -15,7 +15,7 @@ module LogParadox
 using Statistics
 using Random
 
-export gm, am, picki, smooth, minmaxreplace, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
+export gm, am, picki, smooth, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
 
 """
     gm(xs, base=exp(1))
@@ -181,6 +181,11 @@ reprand! = rep_rand!
 
 
 
+"""
+    to_entries(samples, table)
+
+    For each sample lookup in table what its frequency is.
+"""
 function to_entries(smpl, tbl)
     trs = [to_entry(s, tbl) for s in smpl]
     return trs
@@ -191,7 +196,7 @@ end
     generate_image(counts, sizes, X, Y)
 
     Generate an image using SPECHT's in silico 2D generators
-    
+
 """
 function generate_image(counts, sizes, X, Y)
     GS=[]
@@ -208,6 +213,12 @@ function generate_image(counts, sizes, X, Y)
     ima = GS[1] .+ GS[2] .+ GS[3] .+ GS[4]
 end
 
+
+"""
+    to_entry(sample, table)
+
+    Lookup entry in sorted frequency table
+"""
 function to_entry(s, tbl)
     @assert reverse(sort(tbl)) == tbl
     for (i, t) in enumerate(tbl)
