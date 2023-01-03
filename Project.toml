@@ -1,0 +1,7 @@
+name = "LogParadox"
+uuid = "664ede1c-9e8f-4d3c-a9de-c2f8765d11e6"
+authors = ["Ben Cardoen <26388277+bencardoen@users.noreply.github.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
