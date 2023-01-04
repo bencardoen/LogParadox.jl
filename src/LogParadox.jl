@@ -119,6 +119,13 @@ end
 
     For `steps` iterations, execute `replacer` on xs with values generated from `selector`
     Defaults to replace_minmax! and tfsample, a value sampled from the AM-GM interval.
+
+    # Examples
+    ```julia-repl
+    ys = transform_steps_replace(randexp(1000).*100 .+ 1, 10)
+    ```
+
+    See also [`tfsample!`](@ref), [`rep_minmax!`](@ref), [`rep_rand!`](@ref).
 """
 function transform_steps_replace(xs, steps, replacer = rep_minmax!, TF = tfsample)
     ys = copy(xs)

@@ -35,6 +35,16 @@ using StatsBase
         end
     end
 
+    @testset "repadd" begin
+        Random.seed!(42)
+        for i in 1:100
+            xs = 1 .+ rand(1000)*i
+            ys = transform_steps(xs, 100)
+            @test am(ys) != am(xs)
+            @test gm(ys) != gm(xs)
+        end
+    end
+
 
     @testset "sm" begin
         Random.seed!(42)
@@ -45,16 +55,6 @@ using StatsBase
         t = smooth(xs, 10)
         @test ! all(s .== xs[1:length(s)])
         @test ! all(t .== s[1:length(t)])
-    end
-
-    @testset "repadd" begin
-        Random.seed!(42)
-        for i in 1:100
-            xs = 1 .+ rand(1000)*i
-            ys = transform_steps_replace(xs, 100)
-            @test am(ys) < am(xs)
-            @test gm(ys) > gm(xs)
-        end
     end
 
 

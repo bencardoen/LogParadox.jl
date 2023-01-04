@@ -40,7 +40,34 @@ julia 1.x>using DataCurator
 
 ## Usage
 
-See [scripts](scripts/gif.jl) for example illustrations that use the API.
+See [scripts](https://github.com/bencardoen/LogParadox.jl/tree/main/scripts) for example illustrations that use the API.
+
+An example using in silico 2D image data, inspired by real datasets is found [here](https://github.com/bencardoen/LogParadox.jl/tree/main/scripts/markov.jl)
+
+The script that generates the gif in this readme is found [here](An example using in silico 2D image data, inspired by real datasets is found [here](https://github.com/bencardoen/LogParadox.jl/tree/main/scripts/gif.jl), and illustrates how the paradoxical comparison can be induced.
+
+An example of inducing the paradox in combination with hypothesis testing is found [here](https://github.com/bencardoen/LogParadox.jl/blob/main/scripts/mwu.jl)
+
+## Minimal example with API
+```julia
+using LogParadox, Distributions
+Random.seed!(42)
+xs = randexp(1000)*1000 .+ 10
+ys = transform_steps_replace(xs, 100)
+@assert gm(xs) < gm(ys) < am(ys) < am(xs)
+```
+The `gm` and `am` functions compute the geometric and arithmetic mean, the transform function iteratively changes the input array `xs` to induce the paradox.
+All functions in the module have docstring, so to access these you can do in a julia REPL:
+```julia
+using LogParadox
+?transform_steps_replace
+```
+which would look something like this
+
+![docstring](figures/docs.png)
+
+## Troubleshooting
+If you have any comments, issues, problems, or suggestions, please create an issue with reproducible description of the problem at hand.
 
 ## Cite
 ```bibtex
