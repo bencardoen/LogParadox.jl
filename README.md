@@ -39,16 +39,8 @@ julia
 julia 1.x>using Pkg; Pkg.add(url="https://github.com/bencardoen/ERGO.jl.git")
 julia 1.x>using Pkg; Pkg.add(url="https://github.com/bencardoen/SPECHT.jl.git")
 julia 1.x>using Pkg; Pkg.add(url="https://github.com/bencardoen/LogParadox.jl.git")
-julia 1.x>Pkg.test("DataCurator")
-julia 1.x>using DataCurator
-```
-or
-```bash
-git clone https://github.com/bencardoen/LogParadox.jl.git
-cd LogParadox.jl
-julia
-julia 1.x>using Pkg; Pkg.activate(); Pkg.resolve(); Pkg.instantiate(); Pkg.test()
-julia 1.x>using DataCurator
+julia 1.x>Pkg.test("LogParadox")
+julia 1.x>using LogParadox
 ```
 
 ## Usage
@@ -61,7 +53,7 @@ The script that generates the gif in this readme is found [here](https://github.
 
 An example of inducing the paradox in combination with hypothesis testing is found [here](https://github.com/bencardoen/LogParadox.jl/blob/main/scripts/mwu.jl).
 
-## Minimal example with API
+### Minimal example with API
 ```julia
 using LogParadox, Distributions
 Random.seed!(42)
