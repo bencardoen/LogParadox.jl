@@ -53,6 +53,12 @@ The script that generates the gif in this readme is found [here](https://github.
 
 An example of inducing the paradox in combination with hypothesis testing is found [here](https://github.com/bencardoen/LogParadox.jl/blob/main/scripts/mwu.jl).
 
+Code for the a plot that shows you the effect of symmetric tails can be found here [here](https://github.com/bencardoen/LogParadox.jl/blob/main/scripts/mesh.jl).
+
+Here we plot what happens to the intermean distance `d(m, M)` in function of m(inimum) and M(aximum).
+![fig](figures/mesh.svg)
+
+
 ### Minimal example with API
 ```julia
 using LogParadox, Distributions

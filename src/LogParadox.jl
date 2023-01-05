@@ -17,7 +17,7 @@ using SPECHT
 using StatsBase
 using Random
 
-export gm, am, picki, smooth, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
+export gm, am, picki, smooth, ID, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
 
 """
     gm(xs, base=exp(1))
@@ -112,6 +112,15 @@ function transform_steps(xs, steps)
         # @info "New midpoint = mp"
     end
     return ys
+end
+
+"""
+    ID(xs)
+
+    Intermean distance (am(xs)-gm(xs))
+"""
+function ID(xs)
+    am(xs) - gm(xs)
 end
 
 """
