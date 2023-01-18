@@ -2,6 +2,10 @@
 
 A project to illustrate how you can obtain paradoxical pattern inversions when applying hypothesis tests, conditional on a log transform of your data.
 
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7545842.svg)](https://doi.org/10.5281/zenodo.7545842)
+
+
 [![Coverage](https://codecov.io/gh/bencardoen/LogParadox.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/bencardoen/LogParadox.jl)
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/bencardoen/LogParadox.jl/tree/main.svg?style=svg&circle-token=304e0f4d40f0fdb0363572f8fabf8ee73334ebfd)](https://dl.circleci.com/status-badge/redirect/gh/bencardoen/LogParadox.jl/tree/main)
@@ -82,5 +86,17 @@ If you have any comments, issues, problems, or suggestions, please create an iss
 
 ## Cite
 ```bibtex
-TODO
+@software{ben_cardoen_2023_7545842,
+  author       = {Ben Cardoen and
+                  Hanene Ben Yedder and
+                  Sieun Lee and
+                  Ivan Robert Nabi and
+                  Ghassan Hamarneh},
+  title        = {LogParadox},
+  month        = jan,
+  year         = 2023,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.7545842},
+  url          = {https://doi.org/10.5281/zenodo.7545842}
+}
 ```
