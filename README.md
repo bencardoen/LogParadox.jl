@@ -32,6 +32,11 @@ As you can observe, a x=25, both geometric and arithmetic means are changed at Î
 
 ![example](figures/pvals50_200.png)
 
+### Sensitivity of symmetric distributions
+When we induce left and right long tails on a symmetric distribution, the preconditions for the paradox (ID[X] --> +âˆž) are still present, showing that LP is not restricted to right long tail distributions.
+
+![example](figures/symmetry.png)
+
 ## Installation
 - Get [Julia](https://julialang.org/learning/getting-started/)
 ```bash
