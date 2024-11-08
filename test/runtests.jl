@@ -2,6 +2,7 @@ using LogParadox
 using Test
 using Random
 using StatsBase
+using DataFrames
 
 @testset "LogParadox.jl" begin
     # Write your tests here.
@@ -20,6 +21,27 @@ using StatsBase
             ys = minmaxreplace(xs, i)
             @test gm(xs) <= gm(ys) <= am(ys) <= am(xs)
         end
+    end
+
+    @testset "checkdf" begin 
+        Random.seed!(2)
+        df = DataFrame(rand(50, 10), :auto)
+        df.label = df.x9 .> .05
+        rdf = check_dataframe(df)
+        @test size(rdf) == (10, 8)
+        @test any(rdf[:, "paradox?"])
+    end
+
+    @testset "testlp" begin
+        X = [2, 4, 6, 13.0]
+        Y = [5.5]
+        ys = vcat(X, Y)
+        # am(X)
+        # gm(X)
+        # am(ys)
+        # gm(ys)
+        gx, gy, ax, ay, p = check_paradox(X, ys)
+        @test p
     end
 
     @testset "rep" begin

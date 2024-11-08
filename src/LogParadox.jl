@@ -10,14 +10,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-# Copyright 2022-3, Ben Cardoen
+# Copyright 2022-4, Ben Cardoen
 module LogParadox
 using Statistics
 using SPECHT
 using StatsBase
+using Combinatorics
 using Random
+using DataFrames
 
-export gm, am, picki, smooth, ID, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
+export gm, am, picki, smooth, ID, check_paradox, check_dataframe, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
 
 """
     gm(xs, base=exp(1))
@@ -26,6 +28,51 @@ export gm, am, picki, smooth, ID, minmaxreplace, to_entry, to_entries, generate_
 """
 function gm(xs, base = exp(1))
     exp(mean(log.(base, xs)))
+end
+
+"""
+    check_paradox(xs, ys)
+    Return the means (geometric and arithmetic) for x, y and if there is a paradoxical ordering.
+"""
+function check_paradox(xs::AbstractVector{T}, ys::AbstractVector{T}) where {T<:Number}
+    gx, ax = gm(xs), am(xs)
+    gy, ay = gm(ys), am(ys)
+    p = false
+    if gx < gy
+        p = gx < gy && ay < ax
+    else
+        p = gy < gx && ax < ay
+    end
+    return gx, gy, ax, ay, p
+end 
+
+"""
+    check_dataframe(df, labelcolumn="label", skipcols=nothing)
+    
+    Check if a dataframe contains a paradoxical comparison. 
+    The dataframe should have N rows where each column, except `labelcolumn` is a feature
+"""
+function check_dataframe(df, labelcolumn="label", skipcols=nothing)
+    columns = names(df)
+    if ! (labelcolumn in columns)
+        @error "No label"
+        throw(ArgumentError("No label to check"))
+    end
+    labels = unique(df[:, labelcolumn])
+    features = [c for c in columns if c != labelcolumn]
+    @info "Have $labels different labels for $(size(df, 1)) rows and $(length(features)) features"
+    label_combinations = combinations(labels, 2)
+    @info label_combinations |> collect
+    results = DataFrame([String[],String[],String[], Float64[], Float64[], Float64[], Float64[], Bool[]], ["feature", "label_1", "label_2", "gx", "gy", "ax", "ay", "paradox?"])
+    for f in features
+        for (lx, ly) in label_combinations
+            dfx = df[df[:,labelcolumn] .== lx, f]
+            dfy = df[df[:,labelcolumn] .== ly, f]
+            gx, gy, ax, ay, p = check_paradox(dfx, dfy)
+            push!(results, [f, "$lx", "$ly", gx, gy, ax, ay, p])
+        end
+    end        
+    return results
 end
 
 """
