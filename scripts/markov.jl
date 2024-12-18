@@ -11,6 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Copyright 2022-3, Ben Cardoen
+using Pkg; Pkg.activate(".")
 using SPECHT
 using Plots
 using Random
@@ -37,24 +38,11 @@ pb = freq_b ./ Nb
 
 S = 100
 Random.seed!(42)
-a_counts = nothing
-b_counts = nothing
-while true
-    rs = rand(S)
-    entries_a = to_entries(rs, pa)
-    entries_b = to_entries(rs, pb)
-    a_counts = countmap(entries_a)
-    b_counts = countmap(entries_b)
-    if length(a_counts)==4 && length(b_counts)==4
-        if a_counts[4] == b_counts[4]
-            break
-        end
-    end
-end
-imga = generate_image(a_counts, sizes, X, Y)
-imgb = generate_image(b_counts, sizes, X, Y)
 
+ac, bc, ima, imb, ga, gb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
 
+@info ac[4] == bc[4]
+# sizes
 Images.save(joinpath("figures","a.tif"), N0f16.(imga./maximum(imga)))
 
 Images.save(joinpath("figures","b.tif"), N0f16.(imgb./maximum(imgb)))

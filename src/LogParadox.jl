@@ -19,7 +19,7 @@ using Combinatorics
 using Random
 using DataFrames
 
-export gm, am, picki, smooth, ID, check_paradox, check_dataframe, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
+export gm, am, picki, smooth, ID, check_paradox, generate_images_from_markov_chains, check_dataframe, minmaxreplace, to_entry, to_entries, generate_image, transform_steps, tf, reprand!, transform_steps, transform_steps_replace, tfsample, rep_min!, rep_max!, rep_minmax!, rep_rand!
 
 """
     gm(xs, base=exp(1))
@@ -62,12 +62,18 @@ function check_dataframe(df, labelcolumn="label", skipcols=nothing)
     features = [c for c in columns if c != labelcolumn]
     @info "Have $labels different labels for $(size(df, 1)) rows and $(length(features)) features"
     label_combinations = combinations(labels, 2)
-    @info label_combinations |> collect
+    # @info label_combinations |> collect
     results = DataFrame([String[],String[],String[], Float64[], Float64[], Float64[], Float64[], Bool[]], ["feature", "label_1", "label_2", "gx", "gy", "ax", "ay", "paradox?"])
     for f in features
+        if !isnothing(skipcols) && f in skipcols
+                continue
+        end
+        # @info f
         for (lx, ly) in label_combinations
+            # @info lx, ly
             dfx = df[df[:,labelcolumn] .== lx, f]
             dfy = df[df[:,labelcolumn] .== ly, f]
+            # @info typeof(dfx)
             gx, gy, ax, ay, p = check_paradox(dfx, dfy)
             push!(results, [f, "$lx", "$ly", gx, gy, ax, ay, p])
         end
@@ -261,23 +267,66 @@ end
     generate_image(counts, sizes, X, Y)
 
     Generate an image using SPECHT's in silico 2D generators
+    Counts is Dict of 1:K objects, corresponding with indices in `sizes`.
+    A size of `2` will correspond to a Gaussian PSF at a random location, K times, of size (2^2)/denom
+    X, Y are image dimensions.
 
 """
-function generate_image(counts, sizes, X, Y)
+function generate_image(counts, sizes, X, Y; gt=false, denom=5, offset=50)
     GS=[]
+    coords = Dict()
     for a_c in keys(counts)
-        σ = (sizes[a_c]^2)/5
+        σ = (sizes[a_c]^2)/denom
         CT = counts[a_c]
         @info "Object size $a_c has freq $CT"
         cv = [[σ 0; 0 σ] for _ in 1:CT]
-        rs = SPECHT.generate_rand_coordinates(X, Y, CT; offset=50)
-        # GT = coordstogt([rs[i,:] for i in 1:N], X, Y)
+        rs = SPECHT.generate_rand_coordinates(X, Y, CT; offset=offset)
+        GT = coordstogt([rs[i,:] for i in 1:CT], X, Y)
         G = SPECHT.fastgaussian2d([rs[i,:] for i in 1:CT], cv, X, Y)
         push!(GS, G./maximum(G))
+        coords[a_c] = GT
     end
     ima = GS[1] .+ GS[2] .+ GS[3] .+ GS[4]
+    if gt
+        return ima, coords
+    else
+        return ima
+    end
 end
 
+"""
+    Create images from a Markov chain distribution with two different chains and sizes.
+    Matchstates is a control to generate until a frequency of objects across a, b, is the same.
+    pa, pb should be probability vectors of length N
+    sizes_{a,b} are the object sizes, aligned with pa, pb.
+    pb[i] is the probability of observing sizes of sizes_b[i].
+    X, Y are image dimensions (>128)
+    S is the number of total objects to generate.
+    Return the frequencies and images.
+"""
+function generate_images_from_markov_chains(pa, pb, sizes_a, sizes_b; X=512, Y=512, S=100, matchstate=nothing)
+    a_counts = nothing
+    b_counts = nothing
+    while true
+        rs = rand(S)
+        entries_a = to_entries(rs, pa)
+        entries_b = to_entries(rs, pb)
+        a_counts = countmap(entries_a)
+        b_counts = countmap(entries_b)
+        if isnothing(matchstate)
+            break
+        else
+            if length(a_counts)==length(b_counts)
+                if a_counts[matchstate] == b_counts[matchstate]
+                    break
+                end
+            end
+        end
+    end
+    imga, ga = generate_image(a_counts, sizes_a, X, Y; gt=true)
+    imgb, gb = generate_image(b_counts, sizes_b, X, Y; gt=true)
+    return a_counts, b_counts, imga, imgb, ga, gb
+end
 
 """
     to_entry(sample, table)
