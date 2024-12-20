@@ -30,21 +30,15 @@ sizes = [1, 3, 9, 27]
 freq_a = [300, 100, 30, 7]
 freq_b = [240, 147, 30, 4]
 
-Na = sum(freq_a)
-Nb = sum(freq_b)
-
-pa = freq_a ./ Na
-pb = freq_b ./ Nb
-
+pa = freq_a ./ sum(freq_a)
+pb = freq_b ./ sum(freq_b)
 S = 100
 Random.seed!(42)
 
 ac, bc, ima, imb, ga, gb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
 
-@info ac[4] == bc[4]
-# sizes
-Images.save(joinpath("figures","a.tif"), N0f16.(imga./maximum(imga)))
 
-Images.save(joinpath("figures","b.tif"), N0f16.(imgb./maximum(imgb)))
-imshow(imgb)
-imshow(imga)
+Images.save(joinpath("figures","a.tif"), N0f16.(ima./maximum(ima)))
+Images.save(joinpath("figures","b.tif"), N0f16.(imb./maximum(imb)))
+imshow(imgb);
+imshow(imga);

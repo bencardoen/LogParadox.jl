@@ -31,6 +31,17 @@ using DataFrames
         @test length(ac) == length(bc)
         @test length(bc) == 4
         @test ima != imb
+        freq_a = [300, 100, 30, 7]
+        freq_b = [240, 147, 30, 0]
+        Na = sum(freq_a)
+        Nb = sum(freq_b)
+        pa = freq_a ./ Na
+        pb = freq_b ./ Nb
+        S = 100
+        ac, bc, ima, imb, ga, gb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
+        @test length(ac) == length(bc)
+        @test length(bc) == 4
+        @test ima != imb
     end
 
     @testset "mm" begin

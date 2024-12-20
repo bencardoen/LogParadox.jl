@@ -279,12 +279,18 @@ function generate_image(counts, sizes, X, Y; gt=false, denom=5, offset=50)
         σ = (sizes[a_c]^2)/denom
         CT = counts[a_c]
         @info "Object size $a_c has freq $CT"
-        cv = [[σ 0; 0 σ] for _ in 1:CT]
-        rs = SPECHT.generate_rand_coordinates(X, Y, CT; offset=offset)
-        GT = coordstogt([rs[i,:] for i in 1:CT], X, Y)
-        G = SPECHT.fastgaussian2d([rs[i,:] for i in 1:CT], cv, X, Y)
-        push!(GS, G./maximum(G))
-        coords[a_c] = GT
+        if CT == 0
+            @info "Empty class"
+            push!(GS, zeros(X, Y))
+            coords[a_c] = []
+        else
+            cv = [[σ 0; 0 σ] for _ in 1:CT]
+            rs = SPECHT.generate_rand_coordinates(X, Y, CT; offset=offset)
+            GT = coordstogt([rs[i,:] for i in 1:CT], X, Y)
+            G = SPECHT.fastgaussian2d([rs[i,:] for i in 1:CT], cv, X, Y)
+            push!(GS, G./maximum(G))
+            coords[a_c] = GT
+        end
     end
     ima = GS[1] .+ GS[2] .+ GS[3] .+ GS[4]
     if gt
@@ -312,7 +318,23 @@ function generate_images_from_markov_chains(pa, pb, sizes_a, sizes_b; X=512, Y=5
         entries_a = to_entries(rs, pa)
         entries_b = to_entries(rs, pb)
         a_counts = countmap(entries_a)
+        N = length(pa)
+        opts = 1:N |> collect
+        for o in opts
+            if  ! (o in keys(a_counts))
+                @info "adding empty count for $o"
+                a_counts[o] = 0
+            end
+        end
         b_counts = countmap(entries_b)
+        N = length(pb)
+        opts = 1:N |> collect
+        for o in opts
+            if  ! (o in keys(b_counts))
+                @info "adding empty count for $o"
+                b_counts[o] = 0
+            end
+        end
         if isnothing(matchstate)
             break
         else
