@@ -35,7 +35,7 @@ pb = freq_b ./ sum(freq_b)
 S = 100
 Random.seed!(42)
 
-ac, bc, ima, imb, ga, gb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
+ac, bc, ima, imb, ga, gb, gsa, gsb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
 
 
 Images.save(joinpath("figures","a.tif"), N0f16.(ima./maximum(ima)))

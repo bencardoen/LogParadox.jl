@@ -288,16 +288,26 @@ function generate_image(counts, sizes, X, Y; gt=false, denom=5, offset=50)
             rs = SPECHT.generate_rand_coordinates(X, Y, CT; offset=offset)
             GT = coordstogt([rs[i,:] for i in 1:CT], X, Y)
             G = SPECHT.fastgaussian2d([rs[i,:] for i in 1:CT], cv, X, Y)
-            push!(GS, G./maximum(G))
+            push!(GS, rescale(G))
             coords[a_c] = GT
         end
     end
-    ima = GS[1] .+ GS[2] .+ GS[3] .+ GS[4]
+    ima = sum(GS ./ length(GS))
     if gt
-        return ima, coords
+        return ima, coords, GS
     else
         return ima
     end
+end
+
+function rescale(xs)
+    M=maximum(xs)
+    m=minimum(xs)
+    if M==m
+        @error "$m == $M"
+        return xs
+    end
+    return (xs .- m)/(M-m)
 end
 
 """
@@ -345,9 +355,18 @@ function generate_images_from_markov_chains(pa, pb, sizes_a, sizes_b; X=512, Y=5
             end
         end
     end
-    imga, ga = generate_image(a_counts, sizes_a, X, Y; gt=true)
-    imgb, gb = generate_image(b_counts, sizes_b, X, Y; gt=true)
-    return a_counts, b_counts, imga, imgb, ga, gb
+    imga, ga, GSa = generate_image(a_counts, sizes_a, X, Y; gt=true)
+    imgb, gb, GSb = generate_image(b_counts, sizes_b, X, Y; gt=true)
+    return a_counts, b_counts, imga, imgb, ga, gb, GSa, GSb
+end
+
+function combine(gsa)
+    gsb = []
+    N = length(gsa)
+    for (i, ga) in enumerate(gsa)
+        push!(gsb, ga ./ N)
+    end
+    return gsb, sum(gsb)
 end
 
 """

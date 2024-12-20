@@ -27,7 +27,7 @@ using DataFrames
         pa = freq_a ./ Na
         pb = freq_b ./ Nb
         S = 100
-        ac, bc, ima, imb, ga, gb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
+        ac, bc, ima, imb, ga, gb, GSa, GSb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
         @test length(ac) == length(bc)
         @test length(bc) == 4
         @test ima != imb
@@ -38,9 +38,10 @@ using DataFrames
         pa = freq_a ./ Na
         pb = freq_b ./ Nb
         S = 100
-        ac, bc, ima, imb, ga, gb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
+        ac, bc, ima, imb, ga, gb, GSa, GSb = generate_images_from_markov_chains(pa, pb, sizes, sizes; X=X, Y=Y, S=S, matchstate=4)
         @test length(ac) == length(bc)
         @test length(bc) == 4
+        @test length(GSa) == length(GSb)
         @test ima != imb
     end
 
